@@ -1,10 +1,10 @@
 <template>
   <div class="search-panel">
     <input
-      type="text"
+      type="search"
       placeholder="Поиск..."
       v-model="city"
-      @keypress="fetchWeather"
+      @keypress.enter="fetchWeather"
     />
   </div>
 </template>
@@ -12,7 +12,6 @@
 <script>
 export default {
   name: "search-panel",
-
   data() {
     return {
       city: "",
@@ -21,33 +20,33 @@ export default {
 
   methods: {
     fetchWeather() {
-      $this.$emit('fetchWeather', this.city)
-    }
-  }
+      this.$emit("fetchWeather", this.city);
+    },
+  },
 };
 </script>
 
 <style lang="scss">
-.search-panel{
+.search-panel {
   width: 100%;
-  input{
+  input {
     width: 100%;
     padding: 15px;
     appearance: none;
     border: none;
     outline: none;
     background: none;
-    background-color: rgba(255, 255, 255, .5);
-    box-shadow: 0 0 8px rgba(0, 0, 0, .25);
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.25);
     border-radius: 16px 0 16px 0;
     font-size: 18px;
     color: #333;
-    transition: .4s;
+    transition: 0.4s;
 
-    &:focus{
-      background-color: rgba(255, 255, 255, .8);
+    &:focus {
+      background-color: rgba(255, 255, 255, 0.8);
       border-radius: 0 16px 0 16px;
-      box-shadow: 0 0 14px rgba(0, 0, 0, .25);
+      box-shadow: 0 0 14px rgba(0, 0, 0, 0.25);
     }
   }
 }

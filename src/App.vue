@@ -1,16 +1,18 @@
 <template>
-  <div id="app">
+  <div id="app" :class="typeof WEATHER.main != 'undefined' && WEATHER.main.temp > 16 ? 'warm' : ''">
     <main>
-      <the-search-panel />
+      <the-search-panel @fetchWeather="fetchWeather"/>
 
-      <div class="description">
-        <p class="location">Moscow, RU</p>
-        <p class="date">Saturday 1 October 2022</p>
+      <div v-if="WEATHER.main">
+        <div class="description">
+        <p class="location">{{ WEATHER.name }}, {{ WEATHER.sys.country }}</p>
+        <p class="date">{{date()}}</p>
       </div>
 
       <div class="weather-container">
-        <div class="temp">20°c</div>
-        <div class="weather">Rain</div>
+        <div class="temp">{{ Math.round(WEATHER.main.temp) }}°c</div>
+        <div class="weather">{{ WEATHER.weather[0].main }}</div>
+      </div>
       </div>
     </main>
   </div>
@@ -18,8 +20,47 @@
 
 <script>
 import TheSearchPanel from "./components/TheSearchPanel.vue";
+import {mapActions, mapGetters} from 'vuex'
+
 export default {
   components: { TheSearchPanel },
+  data() {
+    return{
+
+    }
+  },
+
+  mounted() {
+    
+    this.GET_WEATHER()
+  },
+
+  computed: {
+    ...mapGetters([
+      'WEATHER'
+    ])
+  },
+
+  methods: {
+    ...mapActions(['GET_WEATHER']),
+
+    fetchWeather(c){
+      this.GET_WEATHER(c)
+    },
+
+    date() {
+      let d = new Date()
+      let months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      let days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+      let day = days[d.getDay()]
+      let date = d.getDate()
+      let month = months[d.getMonth()]
+      let year = d.getFullYear()
+
+      return `${day} ${date} ${month} ${year}`
+    }
+  }
+
 };
 </script>
 
@@ -82,5 +123,8 @@ export default {
       text-shadow: 1px 3px rgba(0, 0, 0, 0.25);
     }
   }
+}
+#app.warm{
+  background-image: url("./assets/images/warm-bg.jpg");
 }
 </style>
